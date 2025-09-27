@@ -10,17 +10,22 @@ class WorldCupDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Determina el color del texto de contraste
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : Colors.black;
+    final appBarTheme = Theme.of(context).appBarTheme; // Obtiene el tema del AppBar
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
           '${worldCup.year} - ${worldCup.hostCountry}',
-          style: const TextStyle(color: Colors.white),
+          style: appBarTheme.titleTextStyle, // Hereda estilo del tema
         ),
-        backgroundColor: Colors.black.withOpacity(0.5),
+        backgroundColor: appBarTheme.backgroundColor, // Hereda color del tema
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: appBarTheme.iconTheme, // Hereda icono del tema
       ),
       body: Stack(
         fit: StackFit.expand,
@@ -43,89 +48,85 @@ class WorldCupDetailScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: kToolbarHeight + 16),
                   Container(
-                    color: Colors.white70,
+                    color: Theme.of(context).cardColor,
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       'Campeón: ${worldCup.champion}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: textColor,
                       ),
                       textAlign: TextAlign.center,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  // Fila para la bandera y el escudo (ahora más grandes)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(worldCup.championFlag, width: 120, height: 120), // Más grande
+                      Image.asset(worldCup.championFlag, width: 120, height: 120),
                       const SizedBox(width: 24),
-                      Image.asset(worldCup.championEmblem, width: 120, height: 120), // Más grande
+                      Image.asset(worldCup.championEmblem, width: 120, height: 120),
                     ],
                   ),
                   const SizedBox(height: 16),
                   Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white, width: 3),
-                      boxShadow: const [
+                      border: Border.all(color: textColor, width: 3),
+                      boxShadow: [
                         BoxShadow(
-                          color: Colors.black54,
+                          color: isDark ? Colors.black : Colors.black54,
                           blurRadius: 10,
-                          offset: Offset(4, 4),
+                          offset: const Offset(4, 4),
                         ),
                       ],
                     ),
                     child: Image.asset(worldCup.playersPhoto, fit: BoxFit.contain),
                   ),
                   const SizedBox(height: 16),
-                  // Fila para la Mascota y el Balón Oficial con tamaño de fondo igualado
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Contenedor para la Mascota
                       Expanded(
                         child: Container(
-                          height: 200, // Altura fija para igualar
-                          color: Colors.white70,
+                          height: 200,
+                          color: Theme.of(context).cardColor,
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Distribución uniforme
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              const Text(
+                              Text(
                                 'Mascota:',
-                                style: TextStyle(fontSize: 18, color: Colors.black),
+                                style: TextStyle(fontSize: 18, color: textColor),
                               ),
                               Image.asset(worldCup.mascot, height: 100),
                               Text(
                                 worldCup.mascotName,
-                                style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
                               ),
                             ],
                           ),
                         ),
                       ),
                       const SizedBox(width: 16),
-                      // Contenedor para el Balón Oficial
                       Expanded(
                         child: Container(
-                          height: 200, // Altura fija para igualar
-                          color: Colors.white70,
+                          height: 200,
+                          color: Theme.of(context).cardColor,
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Distribución uniforme
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              const Text(
+                              Text(
                                 'Balón Oficial:',
-                                style: TextStyle(fontSize: 18, color: Colors.black),
+                                style: TextStyle(fontSize: 18, color: textColor),
                               ),
                               Image.asset(worldCup.ballImage, height: 100),
                               Text(
                                 worldCup.ballName,
-                                style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
                               ),
                             ],
                           ),
@@ -133,16 +134,10 @@ class WorldCupDetailScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 32), // Mayor espacio para el botón
+                  const SizedBox(height: 32),
                   Center(
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black87,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: const BorderSide(color: Colors.white, width: 2),
-                        ),
-                      ),
+                      // Hereda el estilo del botón global
                       onPressed: () {
                         Navigator.of(context).push(
                           PageRouteBuilder(
@@ -150,21 +145,15 @@ class WorldCupDetailScreen extends StatelessWidget {
                                 IconicMomentScreen(iconicMoment: worldCup.iconicMoments[0]),
                             transitionsBuilder:
                                 (context, animation, secondaryAnimation, child) {
-                              return ScaleTransition(
-                                scale: animation,
-                                child: child,
-                              );
+                              return ScaleTransition(scale: animation, child: child);
                             },
                           ),
                         );
                       },
-                      child: const Text(
-                        'Ver Dato Destacado',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      child: const Text('Ver Dato Destacado'),
                     ),
                   ),
-                  const SizedBox(height: 32), // Espacio adicional en la parte inferior
+                  const SizedBox(height: 32),
                 ],
               ),
             ),

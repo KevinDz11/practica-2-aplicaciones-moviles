@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
-import 'screens/timeline_screen.dart'; // Importa tu pantalla de inicio
+import 'package:provider/provider.dart';
+import 'screens/timeline_screen.dart';
+import 'theme/theme_model.dart'; // Importa el controlador de temas
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider( // Envuelve toda la app
+      create: (context) => ThemeModel(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -10,15 +17,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Escucha el ThemeModel para obtener el tema actual
     return MaterialApp(
       title: 'Historia de los Mundiales',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        appBarTheme: const AppBarTheme(
-          color: Color.fromARGB(255, 0, 70, 4),
-        ),
-      ),
-      home: TimelineScreen(), // Cambia la pantalla de inicio
+      debugShowCheckedModeBanner: false,
+      // Aquí el tema se actualiza automáticamente al llamar a toggleTheme
+      theme: Provider.of<ThemeModel>(context).currentTheme,
+      home: TimelineScreen(),
     );
   }
 }

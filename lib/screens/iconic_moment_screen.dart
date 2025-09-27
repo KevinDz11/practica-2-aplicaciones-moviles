@@ -9,6 +9,10 @@ class IconicMomentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : Colors.black;
+    final appBarTheme = Theme.of(context).appBarTheme;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       extendBodyBehindAppBar: true,
@@ -17,16 +21,15 @@ class IconicMomentScreen extends StatelessWidget {
           'Dato Destacado',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.black.withOpacity(0.5),
+        backgroundColor: appBarTheme.backgroundColor, // Hereda color del tema
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: appBarTheme.iconTheme, // Hereda icono del tema
       ),
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Fondo genérico para todos los Momentos Icónicos
           Image.asset(
-            'assets/backgrounds/background3.jpg', // Usar un fondo de tu carpeta
+            'assets/backgrounds/background3.jpg',
             fit: BoxFit.cover,
           ),
           BackdropFilter(
@@ -43,14 +46,14 @@ class IconicMomentScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: kToolbarHeight + 16),
                   Container(
-                    color: Colors.white70,
+                    color: Theme.of(context).cardColor,
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       iconicMoment.title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: textColor,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -58,12 +61,12 @@ class IconicMomentScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white, width: 3),
-                      boxShadow: const [
+                      border: Border.all(color: textColor, width: 3),
+                      boxShadow: [
                         BoxShadow(
-                          color: Colors.black54,
+                          color: isDark ? Colors.black : Colors.black54,
                           blurRadius: 10,
-                          offset: Offset(4, 4),
+                          offset: const Offset(4, 4),
                         ),
                       ],
                     ),
@@ -71,31 +74,22 @@ class IconicMomentScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Container(
-                    color: Colors.white70,
+                    color: Theme.of(context).cardColor,
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
                       iconicMoment.description,
-                      style: const TextStyle(fontSize: 18, color: Colors.black),
+                      style: TextStyle(fontSize: 18, color: textColor),
                       textAlign: TextAlign.center,
                     ),
                   ),
                   const SizedBox(height: 24),
                   Center(
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black87,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: const BorderSide(color: Colors.white, width: 2),
-                        ),
-                      ),
+                      // Hereda el estilo del botón global
                       onPressed: () {
                         Navigator.of(context).popUntil((route) => route.isFirst);
                       },
-                      child: const Text(
-                        'Volver a la línea del tiempo',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      child: const Text('Volver a la línea del tiempo'),
                     ),
                   ),
                   const SizedBox(height: 24),
